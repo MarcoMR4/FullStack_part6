@@ -1,5 +1,5 @@
 import deepFreeze from 'deep-freeze'
-import counterReducer from './reducer'
+import counterReducer from './reducer' 
 
 describe('unicafe reducer', () => {
   const initialState = {
@@ -9,19 +9,14 @@ describe('unicafe reducer', () => {
   }
 
   test('should return a proper initial state when called with undefined state', () => {
-    const state = {}
-    const action = {
-      type: 'DO_NOTHING'
-    }
-
-    const newState = counterReducer(undefined, action)
+    const state = initialState
+    const action = { type: 'DO_NOTHING' }
+    const newState = counterReducer(state, action) 
     expect(newState).toEqual(initialState)
   })
 
   test('good is incremented', () => {
-    const action = {
-      type: 'GOOD'
-    }
+    const action = { type: 'GOOD' }
     const state = initialState
 
     deepFreeze(state)
@@ -32,4 +27,37 @@ describe('unicafe reducer', () => {
       bad: 0
     })
   })
+
+  test('bad is incremented', () => {
+    const action = { type: 'BAD' }
+    const state = initialState
+
+    deepFreeze(state)
+    const newState = counterReducer(state, action)
+    expect(newState).toEqual({
+      good: 0,
+      ok: 0,
+      bad: 1
+    })
+  })
+
+  test('Reset works', () => {
+    const action = { type: 'RESET' }
+    const state = {
+      good: 2,
+      ok: 3,
+      bad: 1,
+      notes: []
+    }
+
+    deepFreeze(state)
+    const newState = counterReducer(state, action)
+    expect(newState).toEqual({
+      good: 0,
+      ok: 0,
+      bad: 0, 
+      notes: []
+    })
+  })
+
 })

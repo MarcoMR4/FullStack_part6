@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
+// We could use multiple reducers for bigger apps
 
 const initialState = {
   good: 0,
   ok: 0,
-  bad: 0
+  bad: 0, 
+  notes: []
 };
 
 const counterReducer = (state = initialState, action) => {
@@ -16,6 +18,16 @@ const counterReducer = (state = initialState, action) => {
       return { ...state, bad: state.bad + 1 };
     case 'RESET':
       return initialState;
+    case 'NEW_NOTE':
+      return {
+        ...state,
+        notes: [...state.notes, action.payload] 
+      };
+    // case 'TOGGLE_IMPORTANCE':
+    //   return {
+    //     ...note,
+    //     important: note.important
+    //   }
     default:
       return state;
   }
@@ -25,4 +37,5 @@ const store = configureStore({
   reducer: counterReducer
 });
 
-export { store, counterReducer };
+export default counterReducer;
+ 
