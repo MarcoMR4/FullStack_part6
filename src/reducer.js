@@ -23,11 +23,15 @@ const counterReducer = (state = initialState, action) => {
         ...state,
         notes: [...state.notes, action.payload] 
       };
-    // case 'TOGGLE_IMPORTANCE':
-    //   return {
-    //     ...note,
-    //     important: note.important
-    //   }
+      case 'TOGGLE_IMPORTANCE':
+        return {
+          ...state,
+          notes: state.notes.map(note =>
+            note.id === action.payload.id
+              ? { ...note, important: !note.important } 
+              : note 
+          )
+        };      
     default:
       return state;
   }
