@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, current } from '@reduxjs/toolkit'
 
 const noteSlice = createSlice({
   name: 'notes',
@@ -21,12 +21,14 @@ const noteSlice = createSlice({
         important: false,
         id: Number((Math.random() * 1000000).toFixed(0)), 
       })
+      console.log('El state ',current(state))
     },
     toggleImportance: (state, action) => {
       const note = state.find(n => n.id === action.payload)
       if (note) {
         note.important = !note.important
       }
+      console.log('State ',current(state))
     },
   },
 })

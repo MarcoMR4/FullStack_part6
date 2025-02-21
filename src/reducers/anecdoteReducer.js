@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { sendNotification, hideNotification } from "./notificationReducer";
 
 const anecdotesAtStart = [
     'If it hurts, do it more often',
@@ -23,7 +24,7 @@ const initialState = anecdotesAtStart.map(asObject)
   
 const anecodteSlice = createSlice({
     name: 'anecdotes',
-    initialState: initialState,
+    initialState,
     reducers: {
       newAnecdote: (state, action) => {
         state.push(asObject(action.payload))
@@ -36,6 +37,29 @@ const anecodteSlice = createSlice({
       }
     },
 })
+
+export const voteAnecdoteWithNotification = (id, content) => {
+  return (dispatch) => {
+      dispatch(anecodteSlice.actions.voteAnecdote(id))
+      dispatch(sendNotification(`You voted for "${content}"`))
+      
+      setTimeout(() => {
+          dispatch(hideNotification());
+      }, 5000);
+  };
+};
+
+export const addAnecdoteWithNotification = (content) => {
+  return (dispatch) => {
+    dispatch(anecodteSlice.actions.newAnecdote(content))
+    dispatch(sendNotification(`You added "${content}"`))
+      
+    setTimeout(() => {
+        dispatch(hideNotification());
+    }, 5000);
+
+  }
+}
   
 export const { newAnecdote, voteAnecdote } = anecodteSlice.actions
 export default anecodteSlice.reducer

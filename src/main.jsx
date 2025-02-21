@@ -8,13 +8,15 @@ import noteReducer from './reducers/noteReducer'
 import anecdoteReducer from './reducers/anecdoteReducer'
 import filterReducer from './reducers/filterReducer'
 import anecdoteFilter from './reducers/anecdoteFilterReducer'
+import notificationSlice from './reducers/notificationReducer'
 
 const store = configureStore({
   reducer: {
     notes: noteReducer, 
     anecdotes: anecdoteReducer, 
     filter: filterReducer, 
-    anecdoteFilter1: anecdoteFilter
+    anecdoteFilter1: anecdoteFilter,
+    notification: notificationSlice
   },
 })
 
