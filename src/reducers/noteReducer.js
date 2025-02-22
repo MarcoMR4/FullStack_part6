@@ -1,27 +1,12 @@
 import { createSlice, current } from '@reduxjs/toolkit'
+import noteService from '../services/noteService'
 
 const noteSlice = createSlice({
   name: 'notes',
-  initialState: [
-    {
-      content: 'reducer defines how redux store works',
-      important: true,
-      id: 1,
-    },
-    {
-      content: 'state of store can contain any data',
-      important: false,
-      id: 2,
-    }
-  ],
+  initialState: [],
   reducers: {
-    newNote: (state, action) => {
-      state.push({
-        content: action.payload,
-        important: false,
-        id: Number((Math.random() * 1000000).toFixed(0)), 
-      })
-      console.log('El state ',current(state))
+    newNote(state, action) {
+      state.push(action.payload)
     },
     toggleImportance: (state, action) => {
       const note = state.find(n => n.id === action.payload)
@@ -30,8 +15,28 @@ const noteSlice = createSlice({
       }
       console.log('State ',current(state))
     },
+    appendNote(state, action) {
+      state.push(action.payload)
+    }, 
+    setNotes(state, action) {
+      return action.payload
+    }
   },
 })
 
-export const { newNote, toggleImportance } = noteSlice.actions
+export const { newNote, toggleImportance, appendNote, setNotes } = noteSlice.actions
+
+export const toggleImportanceThunk = (id) => {
+  return async (dispatch, getState) => {
+    const state = getState()
+    const note = state.notes.find(n => n.id === id)
+
+    if (note) {
+      const updatedNote = { ...note, important: !note.important }
+      await noteService.changeImportant(id, updatedNote)
+      dispatch(toggleImportance(id))
+    }
+  }
+}
+
 export default noteSlice.reducer
