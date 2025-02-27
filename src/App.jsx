@@ -1,9 +1,15 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { getNotes, createNote, updateNote } from './requests'
 import Anecdotes from './components/Anecdotes'
+import Display from './components/Display'
+import Button from './components/Button'
+import { useReducer } from 'react'
+import { counterReducer } from './reducers/counterReducer'
+
 
 const App = () => {
   const queryClient = useQueryClient()
+  const [counter, counterDispatch] = useReducer(counterReducer, 0)
 
   const newNoteMutation = useMutation({
     mutationFn: createNote,
@@ -45,6 +51,8 @@ const App = () => {
     updateNoteMutation.mutate({...note, important: !note.important })
   }
 
+ 
+
   return(
     <div>
       <h2>Notes app</h2>
@@ -60,6 +68,15 @@ const App = () => {
       )}
       <hr />
       <Anecdotes />
+      <hr />
+      <div>
+        <Display />
+        <div>
+          <Button type='INC' label='+' />
+          <Button type='DEC' label='-' />
+          <Button type='ZERO' label='0' />
+        </div>
+      </div> 
     </div>
   )
 }
